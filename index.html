@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CBT Repository Platform | 자격시험 CBT 저장소 생성·운영 플랫폼</title>
+  <meta name="description" content="사용자가 보유한 문제 데이터를 업로드하여 자격시험별 CBT 저장소를 생성하고, 실전 응시·채점·취약 과목 복습을 지원하는 확장형 CBT 플랫폼" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <nav class="nav container">
+      <div class="nav-brand">
+        <span class="brand-icon">📚</span>
+        <span class="brand-name">CBT Repository Platform</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#overview">개요</a></li>
+        <li><a href="#features">핵심 기능</a></li>
+        <li><a href="#architecture">구조</a></li>
+        <li><a href="#roadmap">로드맵</a></li>
+      </ul>
+      <a href="https://github.com/glory903-devsecops/cbt-repository-platform" target="_blank" class="nav-github">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">🚀 프로젝트 기획서 v1.0</div>
+      <h1 class="hero-title">
+        자격시험 CBT 저장소<br/>
+        <span class="gradient-text">생성·운영 플랫폼</span>
+      </h1>
+      <p class="hero-subtitle">
+        사용자가 보유한 문제 데이터를 업로드하여 자격시험별 CBT 저장소를 생성하고,<br/>
+        시험 기준·과목·합격/과락 기준에 따라 실전 응시·채점·취약 과목 복습을 지원하는<br/>
+        <strong>확장형 CBT 플랫폼</strong>
+      </p>
+      <div class="hero-tags">
+        <span class="htag">산업보안관리사</span>
+        <span class="htag">정보보안기사</span>
+        <span class="htag">정보처리기사</span>
+        <span class="htag">+ 확장 가능</span>
+      </div>
+      <div class="hero-actions">
+        <a href="#features" class="btn-primary">기능 보기</a>
+        <a href="https://github.com/glory903-devsecops/cbt-repository-platform" target="_blank" class="btn-secondary">GitHub 저장소</a>
+      </div>
+    </div>
+    <div class="hero-stats container">
+      <div class="stat-card"><div class="stat-num">125</div><div class="stat-label">산업보안관리사 문항</div></div>
+      <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">초기 검증 과목</div></div>
+      <div class="stat-card"><div class="stat-num">4+</div><div class="stat-label">확장 자격시험</div></div>
+      <div class="stat-card"><div class="stat-num">MVP</div><div class="stat-label">1차 개발 단계</div></div>
+    </div>
+  </section>
+
+  <!-- Overview -->
+  <section class="section" id="overview">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">📋 프로젝트 개요</div>
+        <h2>Project Overview</h2>
+        <p>특정 시험 하나에 종속되지 않고, 플랫폼 내에서 자격시험별 <strong>CBT 저장소</strong>를 독립적으로 생성·운영합니다.</p>
+      </div>
+
+      <div class="concept-box">
+        <h3>🗂️ CBT Repository 개념</h3>
+        <div class="repo-tree">
+          <div class="tree-root">CBT Repository Platform</div>
+          <div class="tree-children">
+            <div class="tree-child">
+              <div class="tree-node active">📁 산업보안관리사 CBT Repository <span class="node-badge">초기 검증</span></div>
+              <div class="tree-items">
+                <span>시험 기준</span><span>과목 구조</span><span>문제은행</span><span>응시 이력</span><span>취약 과목 분석</span>
+              </div>
+            </div>
+            <div class="tree-child">
+              <div class="tree-node">📁 정보보안기사 CBT Repository</div>
+            </div>
+            <div class="tree-child">
+              <div class="tree-node">📁 정보처리기사 CBT Repository</div>
+            </div>
+            <div class="tree-child">
+              <div class="tree-node muted">📁 + 추가 가능...</div>
+            </div>
+          </div>
+        </div>
+        <div class="concept-note">
+          <span class="note-icon">⚠️</span>
+          <strong>핵심 원칙:</strong> 과목명, 과목 수, 문항 수, 제한 시간, 합격/과락 기준은 코드에 하드코딩하지 않습니다. 모든 시험 기준은 관리자가 저장소 생성 시 직접 설정합니다.
+        </div>
+      </div>
+
+      <div class="exam-spec">
+        <h3>🎯 초기 검증 대상: 산업보안관리사</h3>
+        <div class="spec-grid">
+          <div class="spec-table-wrap">
+            <table class="spec-table">
+              <tr><th>항목</th><th>설정값</th></tr>
+              <tr><td>문제 수</td><td>총 125문항</td></tr>
+              <tr><td>제한 시간</td><td>120분</td></tr>
+              <tr><td>문제 유형</td><td>객관식 4지 택일형</td></tr>
+              <tr><td>합격 기준</td><td>전 과목 평균 70점 이상</td></tr>
+              <tr><td>과락 기준</td><td>단일 과목 40점 미만</td></tr>
+            </table>
+          </div>
+          <div class="subject-list">
+            <div class="subject-item"><span class="subj-num">1</span><span class="subj-name">관리적보안</span><span class="subj-count">25문항</span></div>
+            <div class="subject-item"><span class="subj-num">2</span><span class="subj-name">물리적보안</span><span class="subj-count">25문항</span></div>
+            <div class="subject-item"><span class="subj-num">3</span><span class="subj-name">기술적보안</span><span class="subj-count">25문항</span></div>
+            <div class="subject-item"><span class="subj-num">4</span><span class="subj-name">보안사고대응</span><span class="subj-count">25문항</span></div>
+            <div class="subject-item"><span class="subj-num">5</span><span class="subj-name">보안지식경영</span><span class="subj-count">25문항</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section section-dark" id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">⚡ 핵심 기능</div>
+        <h2>Core Features</h2>
+        <p>관리자와 학습자 모두를 위한 완결된 CBT 운영 기능을 제공합니다.</p>
+      </div>
+
+      <div class="flow-grid">
+        <div class="flow-col">
+          <div class="flow-title">👤 관리자 흐름</div>
+          <div class="flow-steps">
+            <div class="flow-step">1. CBT 저장소 생성</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">2. 시험 기준 입력</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">3. 과목 생성 및 설정</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">4. 문제 CSV 업로드</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">5. 문제 검수</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step active">6. CBT 저장소 활성화</div>
+          </div>
+        </div>
+        <div class="flow-col">
+          <div class="flow-title">🎓 학습자 흐름</div>
+          <div class="flow-steps">
+            <div class="flow-step">1. CBT 저장소 선택</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">2. 응시 모드 선택</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">3. 문제 풀이</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">4. 제출 및 자동 채점</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">5. 합격/불합격/과락 확인</div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step active">6. 취약 과목 집중 복습</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="features-grid">
+        <div class="feat-card">
+          <div class="feat-icon">📝</div>
+          <h3>응시 모드</h3>
+          <div class="mode-table">
+            <div class="mode-row head"><span>모드</span><span>설명</span></div>
+            <div class="mode-row mvp"><span>실전 모의고사</span><span>전체 문항 실전 출제</span></div>
+            <div class="mode-row mvp"><span>과목별 풀이</span><span>선택 과목 집중 학습</span></div>
+            <div class="mode-row mvp"><span>오답 복습</span><span>틀린 문제 재출제</span></div>
+            <div class="mode-row later"><span>미니 CBT</span><span>5·10·20문항 단기 학습</span></div>
+            <div class="mode-row later"><span>취약 과목 집중</span><span>과락 위험 과목 우선</span></div>
+          </div>
+          <div class="mvp-note">🟢 MVP 우선 / 🔵 2차 고도화</div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">⚖️</div>
+          <h3>채점 및 과락 판정</h3>
+          <div class="score-formula">
+            <div class="formula-item">
+              <div class="f-label">과목별 점수</div>
+              <div class="f-value">정답 수 / 출제 수 × 100</div>
+            </div>
+            <div class="formula-item">
+              <div class="f-label">전체 평균</div>
+              <div class="f-value">전 과목 점수의 평균</div>
+            </div>
+          </div>
+          <div class="pass-table">
+            <div class="pass-row pass-ok"><span>✅ 합격</span><span>평균 70점 이상 + 전 과목 40점 이상</span></div>
+            <div class="pass-row pass-fail"><span>❌ 불합격</span><span>평균 70점 미만</span></div>
+            <div class="pass-row pass-drop"><span>⚠️ 과락</span><span>단일 과목 40점 미만</span></div>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">📊</div>
+          <h3>취약 과목 분석</h3>
+          <div class="weakness-formula">
+            <div class="w-title">취약도 점수 계산식</div>
+            <div class="w-items">
+              <div class="w-item">100 - 과목 정답률</div>
+              <div class="w-plus">+</div>
+              <div class="w-item">과락 위험 가중치</div>
+              <div class="w-plus">+</div>
+              <div class="w-item">최근 오답 빈도</div>
+              <div class="w-plus">+</div>
+              <div class="w-item">장기 미학습 가중치</div>
+            </div>
+          </div>
+          <div class="priority-list">
+            <div class="pri-item"><span class="pri-rank">1순위</span><span>과락 기준 미달 과목</span></div>
+            <div class="pri-item"><span class="pri-rank">2순위</span><span>평균 이하 과목</span></div>
+            <div class="pri-item"><span class="pri-rank">3순위</span><span>최근 오답률 높은 과목</span></div>
+            <div class="pri-item"><span class="pri-rank">4순위</span><span>장기간 미풀이 과목</span></div>
+          </div>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">📱</div>
+          <h3>모바일 UX (Mobile-first)</h3>
+          <div class="mobile-layout">
+            <div class="mobile-zone top">🔒 상단 고정: 시험명 · 남은 시간 · 문제 번호</div>
+            <div class="mobile-zone mid">📄 본문: 문제 지문 + 카드형 터치 버튼 (1~4번)</div>
+            <div class="mobile-zone bot">⬇️ 하단: 이전 · 문제목록(바텀시트) · 다음</div>
+          </div>
+          <div class="mobile-rules">
+            <div class="rule-item">✔ 한 화면에 한 문제</div>
+            <div class="rule-item">✔ 답안 자동 저장</div>
+            <div class="rule-item">✔ 새로고침 후 복구</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section class="section" id="architecture">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">🏗️ 시스템 구조</div>
+        <h2>Architecture & Tech Stack</h2>
+        <p>확장 가능한 도메인 구조와 클린 아키텍처를 기반으로 설계합니다.</p>
+      </div>
+
+      <div class="arch-layout">
+        <div class="arch-block frontend">
+          <div class="arch-label">Frontend</div>
+          <div class="arch-items">
+            <span>React / Next.js</span>
+            <span>Tailwind CSS</span>
+            <span>모바일 반응형</span>
+            <span>카드형 CBT UI</span>
+          </div>
+        </div>
+        <div class="arch-arrow-h">→</div>
+        <div class="arch-block backend">
+          <div class="arch-label">Backend</div>
+          <div class="arch-items">
+            <span>FastAPI</span>
+            <span>Python</span>
+            <span>REST API</span>
+            <span>CSV 업로드</span>
+          </div>
+        </div>
+        <div class="arch-arrow-h">→</div>
+        <div class="arch-block database">
+          <div class="arch-label">Database</div>
+          <div class="arch-items">
+            <span>SQLite (MVP)</span>
+            <span>PostgreSQL (확장)</span>
+          </div>
+        </div>
+        <div class="arch-arrow-h">→</div>
+        <div class="arch-block deploy">
+          <div class="arch-label">Deployment</div>
+          <div class="arch-items">
+            <span>GitHub Pages</span>
+            <span>Vercel</span>
+            <span>Render / Fly.io</span>
+            <span>Docker</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="api-section">
+        <h3>📡 API 설계 초안</h3>
+        <div class="api-grid">
+          <div class="api-group">
+            <div class="api-title">Repository API</div>
+            <code>POST /api/repositories</code>
+            <code>GET /api/repositories</code>
+            <code>GET /api/repositories/{id}</code>
+            <code>PATCH /api/repositories/{id}</code>
+          </div>
+          <div class="api-group">
+            <div class="api-title">Subject API</div>
+            <code>POST /api/repositories/{id}/subjects</code>
+            <code>GET /api/repositories/{id}/subjects</code>
+            <code>PATCH /api/subjects/{id}</code>
+          </div>
+          <div class="api-group">
+            <div class="api-title">Question API</div>
+            <code>POST /api/repositories/{id}/questions</code>
+            <code>POST /api/repositories/{id}/questions/upload</code>
+            <code>GET /api/repositories/{id}/questions</code>
+          </div>
+          <div class="api-group">
+            <div class="api-title">Exam API</div>
+            <code>POST /api/repositories/{id}/exam-sessions</code>
+            <code>POST /api/exam-sessions/{id}/answers</code>
+            <code>POST /api/exam-sessions/{id}/submit</code>
+            <code>GET /api/exam-sessions/{id}/result</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section class="section section-dark" id="roadmap">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">🗺️ 개발 로드맵</div>
+        <h2>Development Roadmap</h2>
+        <p>단계별 MVP 계획으로 빠르게 검증하고 점진적으로 확장합니다.</p>
+      </div>
+
+      <div class="roadmap-grid">
+        <div class="rm-card current">
+          <div class="rm-phase">1차 MVP</div>
+          <div class="rm-status">🟡 진행중</div>
+          <ul>
+            <li>✅ 프로젝트 기획서 작성</li>
+            <li>✅ GitHub 저장소 구성</li>
+            <li>⏳ CBT 저장소 생성 기능</li>
+            <li>⏳ 시험 기준 설정</li>
+            <li>⏳ 과목 생성</li>
+            <li>⏳ 문제 CSV 업로드</li>
+            <li>⏳ 실전 모의고사 UI</li>
+            <li>⏳ 자동 채점 / 과락 판정</li>
+          </ul>
+        </div>
+        <div class="rm-card">
+          <div class="rm-phase">2차 고도화</div>
+          <div class="rm-status">🔵 예정</div>
+          <ul>
+            <li>오답노트</li>
+            <li>취약 과목 집중 출제</li>
+            <li>미니 CBT</li>
+            <li>문제 중복 탐지</li>
+            <li>Excel 업로드 고도화</li>
+            <li>문제 검수 워크플로우</li>
+            <li>응시 이력 대시보드</li>
+          </ul>
+        </div>
+        <div class="rm-card">
+          <div class="rm-phase">3차 고도화</div>
+          <div class="rm-status">🔵 예정</div>
+          <ul>
+            <li>PDF 문제 추출 보조</li>
+            <li>해설 기반 검색</li>
+            <li>태그별 학습</li>
+            <li>학습 리포트 PDF 출력</li>
+            <li>다중 사용자 계정</li>
+            <li>관리자/학습자 권한 분리</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-icon">📚</span>
+        <span>CBT Repository Platform</span>
+      </div>
+      <p>자격시험 CBT 저장소 생성·운영 플랫폼 | 기획서 v1.0</p>
+      <div class="footer-links">
+        <a href="https://github.com/glory903-devsecops/cbt-repository-platform" target="_blank">GitHub</a>
+        <a href="https://github.com/glory903-devsecops/cbt-repository-platform/blob/main/cbt-repository-platform_project_plan.md" target="_blank">기획서 원본</a>
+      </div>
+      <p class="footer-copy">© 2026 glory903-devsecops</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
