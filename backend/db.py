@@ -2,10 +2,21 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean, Float, D
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 from datetime import datetime
+import os
 
-DATABASE_URL = "sqlite:///./cbt.db"
+# 환경변수 DATABASE_URL이 있으면 PostgreSQL(Supabase), 없으면 로컬 SQLite
+DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./cbt.db")
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+# Supabase는 postgresql:// 스킴을 사용 (SQLAlchemy는 postgresql+psycopg2 필요)
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# PostgreSQL vs SQLite 설정 분기
+if DATABASE_URL.startswith("postgresql"):
+    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+else:
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
