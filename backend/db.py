@@ -156,4 +156,17 @@ class SubjectScore(Base):
 
 
 def create_tables():
-    Base.metadata.create_all(bind=engine)
+    global engine, SessionLocal
+    try:
+        # Try to connect and create tables using the configured engine (PostgreSQL or SQLite)
+        Base.metadata.create_all(bind=engine)
+        print("Successfully connected to the database and ensured tables exist.")
+    except Exception as e:
+        print(f"Failed to connect to the primary database. Error: {e}")
+        print("Falling back to local SQLite database (sqlite:///./cbt_fallback.db)...")
+        # Fallback to SQLite
+        fallback_url = "sqlite:///./cbt_fallback.db"
+        engine = create_engine(fallback_url, connect_args={"check_same_thread": False})
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        Base.metadata.create_all(bind=engine)
+        print("Successfully created fallback SQLite database.")
