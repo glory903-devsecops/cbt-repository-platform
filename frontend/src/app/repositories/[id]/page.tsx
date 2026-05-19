@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { api, Repository, Subject, Question } from "@/lib/api";
+import { api, Repository, Subject, Question, ExamHistoryItem } from "@/lib/api";
 
 export default function RepositoryDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -11,8 +11,8 @@ export default function RepositoryDetailPage() {
 
   const [repo, setRepo] = useState<Repository | null>(null);
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [tab, setTab] = useState<"overview" | "questions" | "upload">("overview");
+  const [history, setHistory] = useState<ExamHistoryItem[]>([]);
+  const [tab, setTab] = useState<"overview" | "questions" | "history" | "upload">("overview");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
@@ -20,12 +20,19 @@ export default function RepositoryDetailPage() {
 
   const load = async () => {
     try {
-      const [r, s, q] = await Promise.all([
+      const historyStr = localStorage.getItem("cbt_exam_history");
+      let historyIds: number[] = [];
+      if (historyStr) {
+        try { historyIds = JSON.parse(historyStr); } catch (e) {}
+      }
+
+      const [r, s, q, h] = await Promise.all([
         api.repositories.get(repoId),
         api.subjects.list(repoId),
         api.questions.list(repoId),
+        api.exam.history(historyIds),
       ]);
-      setRepo(r); setSubjects(s); setQuestions(q);
+      setRepo(r); setSubjects(s); setQuestions(q); setHistory(h.filter(hi => hi.repository_id === repoId));
     } catch (e) {
       console.error(e);
     } finally { setLoading(false); }
@@ -87,10 +94,10 @@ export default function RepositoryDetailPage() {
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6 border-b border-gray-800">
-        {(["overview", "questions", "upload"] as const).map((t) => (
+        {(["overview", "questions", "history", "upload"] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)}
             className={`pb-3 px-4 text-sm font-semibold transition-colors border-b-2 ${tab === t ? "border-indigo-500 text-indigo-400" : "border-transparent text-gray-500 hover:text-gray-300"}`}>
-            {t === "overview" ? "📋 과목 현황" : t === "questions" ? "📝 문제 목록" : "⬆️ 문제 업로드"}
+            {t === "overview" ? "📋 과목 현황" : t === "questions" ? "📝 문제 목록" : t === "history" ? "🕒 최근 응시 기록" : "⬆️ 문제 업로드"}
           </button>
         ))}
       </div>
@@ -142,6 +149,42 @@ export default function RepositoryDetailPage() {
             </div>
           ))}
           {questions.length > 50 && <p className="text-gray-500 text-sm text-center py-2">총 {questions.length}문항 중 50문항 표시</p>}
+        </div>
+      )}
+
+      {/* History */}
+      {tab === "history" && (
+        <div className="space-y-3">
+          {history.length === 0 && (
+            <div className="text-center py-10">
+              <p className="text-gray-500 mb-3">응시 기록이 없습니다.</p>
+              <button onClick={() => router.push(`/repositories/${repoId}/exam`)} className="text-indigo-400 hover:text-indigo-300 text-sm underline">시험 시작하기</button>
+            </div>
+          )}
+          {history.map((h) => (
+            <div key={h.session_id} className="bg-gray-900 border border-gray-800 rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded ${h.pass_status === "pass" ? "bg-emerald-900/50 text-emerald-400" : h.pass_status === "fail_subject" ? "bg-yellow-900/50 text-yellow-400" : "bg-red-900/50 text-red-400"}`}>
+                    {h.pass_status === "pass" ? "합격" : h.pass_status === "fail_subject" ? "과락" : "불합격"}
+                  </span>
+                  <span className="text-gray-400 text-xs">{new Date(h.submitted_at).toLocaleString()}</span>
+                  <span className="text-indigo-400 text-xs bg-indigo-900/30 px-2 py-0.5 rounded">{h.mode === "full" ? "실전" : h.mode === "review" ? "오답 복습" : "과목별"}</span>
+                </div>
+                <p className="text-white font-bold text-lg">{h.total_score.toFixed(1)} <span className="text-sm font-normal text-gray-400">점</span></p>
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => router.push(`/exam-sessions/${h.session_id}/result`)} className="bg-gray-800 hover:bg-gray-700 text-white text-sm px-4 py-2 rounded-lg transition-colors">
+                  결과 보기
+                </button>
+                {h.pass_status !== "pass" && (
+                  <button onClick={() => router.push(`/repositories/${repoId}/exam?base=${h.session_id}&mode=review`)} className="bg-amber-600/20 hover:bg-amber-600/30 text-amber-500 border border-amber-700/50 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
+                    오답 다시풀기
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

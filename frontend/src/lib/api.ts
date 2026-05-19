@@ -92,6 +92,16 @@ export interface ExamResult {
   correct_count: number;
 }
 
+export interface ExamHistoryItem {
+  session_id: number;
+  repository_id: number;
+  repository_name: string;
+  mode: string;
+  total_score: number;
+  pass_status: string;
+  submitted_at: string;
+}
+
 // ── API Functions ───────────────────────────────────────────────────────────
 export const api = {
   repositories: {
@@ -128,10 +138,10 @@ export const api = {
   },
 
   exam: {
-    create: (repoId: number, mode: string, subjectId?: number) =>
+    create: (repoId: number, mode: string, subjectId?: number, baseSessionId?: number) =>
       req<ExamSession>(`/api/repositories/${repoId}/exam-sessions`, {
         method: "POST",
-        body: JSON.stringify({ mode, subject_id: subjectId ?? null }),
+        body: JSON.stringify({ mode, subject_id: subjectId ?? null, base_session_id: baseSessionId ?? null }),
       }),
     submit: (sessionId: number, answers: { question_id: number; selected_answer: number | null; marked_for_review: boolean }[]) =>
       req<ExamResult>(`/api/exam-sessions/${sessionId}/submit`, {
@@ -139,5 +149,9 @@ export const api = {
         body: JSON.stringify({ answers }),
       }),
     result: (sessionId: number) => req<ExamResult>(`/api/exam-sessions/${sessionId}/result`),
+    history: (sessionIds: number[]) => {
+      if (sessionIds.length === 0) return Promise.resolve([]);
+      return req<ExamHistoryItem[]>(`/api/exam-sessions/history?session_ids=${sessionIds.join(",")}`);
+    },
   },
 };

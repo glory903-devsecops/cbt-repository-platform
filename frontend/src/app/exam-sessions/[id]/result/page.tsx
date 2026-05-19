@@ -17,7 +17,19 @@ export default function ResultPage() {
 
   useEffect(() => {
     api.exam.result(Number(sessionId))
-      .then(setResult)
+      .then((res) => {
+        setResult(res);
+        // Save to localStorage
+        const historyStr = localStorage.getItem("cbt_exam_history");
+        let historyIds: number[] = [];
+        if (historyStr) {
+          try { historyIds = JSON.parse(historyStr); } catch (e) {}
+        }
+        if (!historyIds.includes(res.session_id)) {
+          historyIds.push(res.session_id);
+          localStorage.setItem("cbt_exam_history", JSON.stringify(historyIds));
+        }
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [sessionId]);

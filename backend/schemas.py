@@ -89,6 +89,7 @@ class QuestionOut(BaseModel):
 class ExamSessionCreate(BaseModel):
     mode: str = "full"          # full | subject | review
     subject_id: Optional[int] = None  # subject 모드일 때만
+    base_session_id: Optional[int] = None # review 모드일 때 참조할 이전 시험 세션 ID
 
 class AnswerSubmit(BaseModel):
     question_id: int

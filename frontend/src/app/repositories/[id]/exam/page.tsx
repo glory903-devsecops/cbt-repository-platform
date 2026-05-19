@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { api, ExamSession, ExamQuestion, Repository, Subject } from "@/lib/api";
 
 const MODE_LABELS: Record<string, string> = { full: "실전 모의고사", subject: "과목별 풀이", review: "오답 복습" };
@@ -8,12 +8,16 @@ const MODE_LABELS: Record<string, string> = { full: "실전 모의고사", subje
 export default function ExamPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const repoId = Number(id);
+  
+  const initMode = searchParams.get("mode") || "full";
+  const baseSessionId = searchParams.get("base") ? Number(searchParams.get("base")) : undefined;
 
   const [repo, setRepo] = useState<Repository | null>(null);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [mode, setMode] = useState<"select" | "exam" | "submitting">("select");
-  const [examMode, setExamMode] = useState("full");
+  const [examMode, setExamMode] = useState(initMode);
   const [selSubject, setSelSubject] = useState<number | undefined>();
   const [session, setSession] = useState<ExamSession | null>(null);
   const [answers, setAnswers] = useState<Record<number, number | null>>({});
@@ -43,7 +47,7 @@ export default function ExamPage() {
 
   const startExam = async () => {
     try {
-      const s = await api.exam.create(repoId, examMode, selSubject);
+      const s = await api.exam.create(repoId, examMode, selSubject, baseSessionId);
       setSession(s);
       const init: Record<number, null> = {};
       s.questions.forEach((q) => { init[q.question_id] = null; });
@@ -84,6 +88,7 @@ export default function ExamPage() {
           {[
             { val: "full", label: "🎯 실전 모의고사", desc: "전체 문항 실전 출제" },
             { val: "subject", label: "📚 과목별 풀이", desc: "선택한 과목만 집중 학습" },
+            ...(baseSessionId ? [{ val: "review", label: "♻️ 오답 복습", desc: "이전 시험에서 틀린 문제 다시 풀기" }] : []),
           ].map((m) => (
             <button key={m.val} onClick={() => { setExamMode(m.val); if (m.val !== "subject") setSelSubject(undefined); }}
               className={`w-full text-left p-4 rounded-xl border transition-all ${examMode === m.val ? "border-indigo-500 bg-indigo-900/20" : "border-gray-800 bg-gray-900 hover:border-gray-600"}`}>

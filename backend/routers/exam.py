@@ -18,6 +18,15 @@ def create_exam_session(repo_id: int, data: ExamSessionCreate, db: Session = Dep
     q_query = db.query(Question).filter(Question.repository_id == repo_id, Question.is_active == True)
     if data.mode == "subject" and data.subject_id:
         q_query = q_query.filter(Question.subject_id == data.subject_id)
+    elif data.mode == "review" and data.base_session_id:
+        wrong_answers = db.query(ExamAnswer).filter(
+            ExamAnswer.exam_session_id == data.base_session_id,
+            ExamAnswer.is_correct == False
+        ).all()
+        wrong_qids = [a.question_id for a in wrong_answers]
+        if not wrong_qids:
+            raise HTTPException(status_code=400, detail="오답이 없습니다. 훌륭합니다!")
+        q_query = q_query.filter(Question.id.in_(wrong_qids))
 
     questions = q_query.all()
     if not questions:
@@ -206,3 +215,33 @@ def get_result(session_id: int, db: Session = Depends(get_db)):
         total_questions=len(session.session_questions),
         correct_count=total_correct,
     )
+
+
+from fastapi import Query
+
+@router.get("/exam-sessions/history")
+def get_exam_history(session_ids: str = Query(..., description="Comma separated session IDs"), db: Session = Depends(get_db)):
+    if not session_ids:
+        return []
+    ids = [int(sid) for sid in session_ids.split(",") if sid.strip().isdigit()]
+    if not ids:
+        return []
+        
+    from db import ExamRepository
+    sessions = db.query(ExamSession).filter(ExamSession.id.in_(ids)).order_by(ExamSession.created_at.desc()).all()
+    repos = {r.id: r.name for r in db.query(ExamRepository).all()}
+    
+    history = []
+    for s in sessions:
+        if not s.submitted_at:
+            continue
+        history.append({
+            "session_id": s.id,
+            "repository_id": s.repository_id,
+            "repository_name": repos.get(s.repository_id, "Unknown"),
+            "mode": s.mode,
+            "total_score": s.total_score,
+            "pass_status": s.pass_status,
+            "submitted_at": s.submitted_at.isoformat() if s.submitted_at else None,
+        })
+    return history
